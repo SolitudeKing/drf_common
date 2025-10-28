@@ -1,0 +1,37 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8",
+        "diffEditor.ignoreTrimWhitespace": false,
+    },
+    /**插件：autopep8**/
+    // 忽略对import的格式化
+    "autopep8.args": [
+        "--max-line-length",
+        "600",
+        "--ignore",
+        "E402",
+        // "E266"
+    ],
+    "autopep8.path": [
+        "autopep8"
+    ],
+    /**插件：autopep8 ==== END **/
+    /** 编辑器设置 **/
+    "editor.formatOnSave": true,
+    "editor.fontSize": 21,
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.cursorBlinking": "expand",
+    "editor.guides.bracketPairs": true,
+    "editor.bracketPairColorization.enabled": true,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.acceptSuggestionOnEnter": "smart",
+    // "editor.fontFamily": "Code New Roman Nerd Font Complete Windows Compatible",
+    "files.autoSave": "onFocusChange",
+    "files.associations": {
+        "*.pyx": "python"
+    },
+    // 文件夹紧凑模式
+    "explorer.compactFolders": false,
+    "notebook.compactView": true,
+    /** 编辑器设置 ==== END **/
+}
