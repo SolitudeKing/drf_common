@@ -4,10 +4,6 @@ from django.utils import timezone
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
-from django.contrib.auth.models import (
-    PermissionsMixin,
-    UserManager
-)
 from django.contrib.auth.base_user import (
     AbstractBaseUser,
 )
@@ -47,50 +43,6 @@ class UsernameValidator(validators.RegexValidator):
     regex = r"^[\w.@+-]+\Z"
     message = "请输入正确的用户名。要求. 30字以内。字母、数字和@/。/ + / - / _。"
     flags = 0
-
-
-class AbstractUser(AbstractBaseUser, PermissionsMixin, BaseModel):
-
-    username_validator = UsernameValidator()
-
-    username = models.CharField(
-        max_length=32,
-        unique=True,
-        null=True, blank=True,
-        verbose_name="用户编号",
-        help_text="要求! 30字以内,字母、数字和@/./ + / - / _号.",
-    )
-    password = models.CharField(max_length=128, verbose_name="密码")
-    validators = [username_validator]
-    email = models.EmailField(verbose_name="邮箱", null=True, blank=True)
-
-    is_staff = models.BooleanField(
-        verbose_name="staff status",
-        default=False,
-        help_text="用户是否可以登录到这个管理站点.",
-    )
-    is_active = models.BooleanField(
-        verbose_name="是否激活",
-        default=True,
-        help_text=(
-            "指定该用户是否应被视为活跃状态。 "
-            "若要取消对账户的处理，请取消选中此选项，而非直接删除账户。"
-        ),
-    )
-
-    USERNAME_FIELD = "username"
-    EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = ["email"]
-    objects = UserManager()
-
-    def clean(self):
-        super().clean()
-        self.email = self.__class__.objects.normalize_email(self.email)
-
-    class Meta:
-        abstract = True
-        verbose_name = "user"
-        verbose_name_plural = "users"
 
 
 class BaseUser(AbstractBaseUser, BaseModel):
