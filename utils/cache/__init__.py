@@ -1,1 +1,1 @@
-from user_cache import UserCache
+from .user_cache import UserCache
