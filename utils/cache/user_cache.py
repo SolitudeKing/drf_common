@@ -1,10 +1,10 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
+import pickle
 from .redis import CommCache
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-import pickle
-User = get_user_model()
+from ..util import getUserModel
+User = getUserModel()
 
 
 class UserCache(CommCache):
