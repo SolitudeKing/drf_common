@@ -33,6 +33,7 @@ class UserCache(CommCache):
 
             us = cls.get(token, pick_ser=True)
             if us:
+                timeout = cls.ttl(token)
                 cls.delete(token)
                 data: dict = us
                 data.update(extra)
@@ -40,7 +41,7 @@ class UserCache(CommCache):
                 cls.set(
                     cache_key=token,
                     data=data,
-                    timeout=cls.ttl(token),
+                    timeout=timeout,
                     pick_ser=True
                 )
         except:  # 未登录情况
