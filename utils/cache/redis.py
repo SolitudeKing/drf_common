@@ -63,11 +63,13 @@ class CommCache:
     def set(cls, cache_key: str, data: any, timeout: int = None, pick_ser: bool = False, json_ser: bool = False) -> None:
         """
         设置缓存数据。
-        :param data: 要缓存的数据
-        :param timeout: 过期时间（秒）
-        :param new_key: 缓存键
-        :param pick_ser: 是否使用pickle序列化
-        :param json_ser: 是否使用json序列化
+        Args:
+            cache_key (str): 缓存键
+            data (any): 要保存的数据
+            timeout (int, optional): 缓存数据的过期时间（秒）。默认为None，表示不设置过期时间。
+            pick_ser (bool, optional): 是否使用pickle序列化。默认为False。
+            json_ser (bool, optional): 是否使用json序列化。默认为False。
+            Returns: None
         """
         data = cls.dataProcess(data, pick_ser=pick_ser, json_ser=json_ser, method="dumps")
 

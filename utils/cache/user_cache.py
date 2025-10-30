@@ -34,13 +34,13 @@ class UserCache(CommCache):
             us = cls.get(token, pick_ser=True)
             if us:
                 cls.delete(token)
-                _extra: dict = us
-                _extra.update(extra)
-                _extra.update({"user": user, "token": token})
+                data: dict = us
+                data.update(extra)
+                data.update({"user": user, "token": token})
                 cls.set(
-                    _extra,
+                    cache_key=token,
+                    data=data,
                     timeout=cls.ttl(token),
-                    new_key=token,
                     pick_ser=True
                 )
         except:  # 未登录情况
