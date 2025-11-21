@@ -5,6 +5,10 @@ from django.http import JsonResponse
 from django.core.paginator import Page, Paginator
 
 
+class Response(JsonResponse):
+    ...
+
+
 class APIResponse:
     """统一API响应类"""
 
@@ -13,6 +17,8 @@ class APIResponse:
             code: BaseStatusCode = CommonStatus.SUCCESS,
             msg: Optional[str] = None,
             data: Any = None,
+            timestamp: Optional[str] = None,
+            request_id: Optional[str] = None,
             **kwargs
     ):
         """
@@ -22,22 +28,32 @@ class APIResponse:
             code (BaseStatusCode): 状态码枚举
             msg (str): 状态信息
             data (Any): 响应数据
+            timestamp (str): 时间戳
+            request_id (str): 请求ID
             **kwargs: 其他参数
         """
         self.code = code
         self.msg = msg or code.message
         self.data = data
+        self.timestamp = timestamp or datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.request_id = request_id
         self.extra = kwargs
 
         # self.data["time"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    def toDict(self):
+    @property
+    def result(self):
         """转换为字典格式"""
         result = {
             "code": self.code.code,
             "msg": self.msg,
-            "result": self.data,
+            "results": self.data,
+            "timestamp": self.timestamp,
         }
+        # 添加请求ID（如果存在）
+        if self.request_id:
+            result["request_id"] = self.request_id
+
         # 添加额外参数
         if self.extra:
             result.update(self.extra)
@@ -45,9 +61,17 @@ class APIResponse:
         return result
 
     def toJsonResponse(self):
-        # 设置HTTP状态
+        """转换为JsonResponse"""
+        # 设置HTTP状态码
         status = self.code.code
-        return JsonResponse(self.toDict(), status=status, json_dumps_params={"ensure_ascii": False})
+
+        # 创建响应
+        response = Response(
+            self.result,
+            status=status,
+            json_dumps_params={"ensure_ascii": False}
+        )
+        return response
 
 
 class ResponseUtil:
